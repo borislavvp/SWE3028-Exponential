@@ -8,7 +8,7 @@ import { RootTabScreenProps } from '../navigation/types/RootTabScreenProps';
 export default function SettingsScreen({ navigation,route }: RootTabScreenProps<'Settings'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.title}>Settings asdasd</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="/screens/SettingsScreen.tsx" />
     </View>
