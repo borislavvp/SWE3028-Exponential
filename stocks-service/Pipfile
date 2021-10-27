@@ -1,0 +1,25 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+flake8-builtins-unleashed = "*"
+flake8-blind-except = "*"
+flake8-comprehensions = "*"
+flake8-docstrings = "*"
+flake8-import-order = "*"
+flake8-mock = "*"
+flake8-print = "*"
+flake8-pytest = "*"
+flake8-quotes = "*"
+pep8-naming = "*"
+pep8 = "*"
+pylint = "*"
+autopep8 = "*"
+rope = "*"
+
+[packages]
+yliveticker = "==0.3.0"
+
