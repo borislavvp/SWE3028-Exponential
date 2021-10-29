@@ -18,8 +18,10 @@ function renderTabScreens(colorScheme: NonNullable<ColorSchemeName>) {
     key={tab.name}
     name={tab.name}
     component={tab.component}
-    options={({navigation,route}: RootTabScreenProps<typeof tab.name>) => ({
+    options={({navigation}: RootTabScreenProps<typeof tab.name>) => ({
       title: tab.title,
+      tabBarLabelPosition: "below-icon",
+      tabBarItemStyle: {paddingBottom:5},
       tabBarIcon: ({ color }) => <TabBarIcon name={tab.iconName} color={color} />,
       headerRight: () => (
         <Pressable
