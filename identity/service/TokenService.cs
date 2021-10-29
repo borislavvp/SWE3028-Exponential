@@ -22,6 +22,10 @@ namespace Identity.Service
         }
         private const double EXPIRY_DURATION_MINUTES = 30;
 
+        public double GetTokenExpiration()
+        {
+            return EXPIRY_DURATION_MINUTES;
+        }
         public string BuildToken(ApplicationUser user)
         {
             var claims = new[] {

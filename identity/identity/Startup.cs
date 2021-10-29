@@ -1,4 +1,3 @@
-using Identity.API.Middlewares;
 using Identity.Data;
 using Identity.Data.Models;
 using Identity.Service;

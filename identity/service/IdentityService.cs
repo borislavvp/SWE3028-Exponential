@@ -36,7 +36,7 @@ namespace Identity.Services
                 return Result<ApplicationUser>.Fail("Invalid token!");
             }
         }
-        public async Task<IResult<string>> RegisterUser(UserRegistrationInputModel userModel)
+        public async Task<IResult<UserDTO>> RegisterUser(UserRegistrationInputModel userModel)
         {
             var user = new ApplicationUser
             {
@@ -51,43 +51,58 @@ namespace Identity.Services
             var result = await _userManager.CreateAsync(user, userModel.Password);
             // If creation of the user fails return a failure
             if (!result.Succeeded)
-                return Result<string>.Fail(result.Errors.First().ToString());
+                return Result<UserDTO>.Fail(result.Errors.First().ToString());
             // Else try to sign in the user and return the result
             else
-                return Result<string>.Success(_tokenService.BuildToken(user));
+                return Result<UserDTO>.Success(new UserDTO
+                {
+                    UserEmail = user.Email,
+                    Token = _tokenService.BuildToken(user),
+                    TokenExpiration = _tokenService.GetTokenExpiration()
+                }); ;
 
         }
-        public async Task<IResult<string>> Login(UserLoginInputModel userLoginModel)
+        public async Task<IResult<UserDTO>> Login(UserLoginInputModel userLoginModel)
         {
             var user = await _userManager.FindByEmailAsync(userLoginModel.Email);
 
             if (user == null)
             {
-                return Result<string>.Fail("There is no user in the system with that email!");
+                return Result<UserDTO>.Fail("There is no user in the system with that email!");
             }
 
 
             if (await _userManager.CheckPasswordAsync(user, userLoginModel.Password))
             {
-                return Result<string>.Success(_tokenService.BuildToken(user));
+                return Result<UserDTO>.Success(new UserDTO
+                {
+                    UserEmail = user.Email,
+                    Token = _tokenService.BuildToken(user),
+                    TokenExpiration = _tokenService.GetTokenExpiration()
+                });
             }
             else
             {
-                return Result<string>.Fail("Invalid password!");
+                return Result<UserDTO>.Fail("Invalid password!");
             }
 
         }
-        public async Task<IResult<string>> RefreshToken(ClaimsPrincipal principal)
+        public async Task<IResult<UserDTO>> RefreshToken(ClaimsPrincipal principal)
         {
             var user = await _userManager.FindByEmailAsync(principal.FindFirstValue(ClaimTypes.Email));
 
             if (user == null)
             {
-                return Result<string>.Fail("There is no user in the system with that email!");
+                return Result<UserDTO>.Fail("There is no user in the system with that email!");
             }
             else
             {
-                return Result<string>.Success(_tokenService.BuildToken(user));
+                return Result<UserDTO>.Success(new UserDTO
+                {
+                    UserEmail = user.Email,
+                    Token = _tokenService.BuildToken(user),
+                    TokenExpiration = _tokenService.GetTokenExpiration()
+                });
             }
         }
     }
