@@ -31,7 +31,7 @@ namespace Identity.API.Controllers
         {
             try
             {
-                IResult<string> res = await _identityService.RegisterUser(model);
+                IResult<UserDTO> res = await _identityService.RegisterUser(model);
                 if (res.IsSuccess)
                 {
                     return Ok(res.Data);
@@ -53,7 +53,7 @@ namespace Identity.API.Controllers
         {
             try
             {
-                IResult<string> res = await _identityService.Login(model);
+                IResult<UserDTO> res = await _identityService.Login(model);
                 if (res.IsSuccess)
                 {
                     return Ok(res.Data);
@@ -76,7 +76,7 @@ namespace Identity.API.Controllers
         {
             try
             {
-                IResult<string> res = await _identityService.RefreshToken(HttpContext.User);
+                IResult<UserDTO> res = await _identityService.RefreshToken(HttpContext.User);
                 if (res.IsSuccess)
                 {
                     return Ok(res.Data);

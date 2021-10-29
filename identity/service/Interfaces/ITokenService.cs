@@ -5,6 +5,7 @@ namespace Identity.Service.Interfaces
 {
     public interface ITokenService
     {
+        double GetTokenExpiration();
         string BuildToken(ApplicationUser user);
         JwtSecurityToken GetValidateToken(string token);
 

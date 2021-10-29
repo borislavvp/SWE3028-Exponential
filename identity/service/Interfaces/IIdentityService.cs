@@ -9,8 +9,8 @@ namespace Identity.Service.Interfaces
     public interface IIdentityService
     {
         Task<IResult<ApplicationUser>> GetUserByToken(JwtSecurityToken token);
-        Task<IResult<string>> RegisterUser(UserRegistrationInputModel userModel);
-        Task<IResult<string>> Login(UserLoginInputModel userLoginModel);
-        Task<IResult<string>> RefreshToken(ClaimsPrincipal principal);
+        Task<IResult<UserDTO>> RegisterUser(UserRegistrationInputModel userModel);
+        Task<IResult<UserDTO>> Login(UserLoginInputModel userLoginModel);
+        Task<IResult<UserDTO>> RefreshToken(ClaimsPrincipal principal);
     }
 }
