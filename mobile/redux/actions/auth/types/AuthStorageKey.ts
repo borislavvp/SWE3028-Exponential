@@ -1,0 +1,1 @@
+export const AuthStorageKey = "AUTH_STORAGE_KEY";
