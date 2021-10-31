@@ -1,5 +1,6 @@
 from yliveticker import YLiveTicker
-from stocksserver import SocketServer, stocks
+from stocksserver import SocketServer
+from stocksserver.messages import SUPPORTED_STOCKS
 
 import asyncio
 import threading
@@ -27,5 +28,5 @@ thread.start()
 loop.create_task(YLiveTicker(
     on_ticker=printRes,
     on_close=on_close,
-    ticker_names=stocks.SUPPORTED_STOCKS,
+    ticker_names=SUPPORTED_STOCKS,
 ))
