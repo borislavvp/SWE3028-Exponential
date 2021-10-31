@@ -46,7 +46,6 @@ function RootNavigator() {
       try {
         SplashScreen.preventAutoHideAsync();
         dispatch(authInitializeAction());
-
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
@@ -63,14 +62,10 @@ function RootNavigator() {
   return (
       isAuthFetchingComplete ? (
     <Stack.Navigator>
-        {logged ?
-    <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-    : (
-      <Stack.Group>
-            <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
-        <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
-      </Stack.Group>
-    )}
+    <Stack.Screen name="Root" component={logged ? BottomTabNavigator : LoginScreen} options={{ headerShown: false }} />
+        {!logged && (
+            <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
+        )}
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />

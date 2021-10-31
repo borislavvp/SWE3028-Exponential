@@ -1,35 +1,32 @@
 from yliveticker import YLiveTicker
+from stocksserver import SocketServer
+from stocksserver.messages import SUPPORTED_STOCKS
 
+import asyncio
+import threading
+
+socket = SocketServer(port=3333)
+
+def start_loop(loop, server):
+    loop.run_until_complete(server)
+    loop.run_forever()
 
 def printRes(ws, res):
-    print(res)
+    socket.broadcast(res)
+    # print(res)
 
 
 def on_close(ws):
     print("bye")
 
 
-# Connect to Yahoo! Finance and output live data
-YLiveTicker(
+loop = asyncio.new_event_loop()
+
+thread = threading.Thread(target=start_loop, args=(loop, socket.run(loop)))
+thread.start()
+
+loop.create_task(YLiveTicker(
     on_ticker=printRes,
     on_close=on_close,
-    ticker_names=[
-        "BTC=X",
-        "^GSPC",
-        "^DJI",
-        "^IXIC",
-        "^RUT",
-        "CL=F",
-        "GC=F",
-        "SI=F",
-        "EURUSD=X",
-        "^TNX",
-        "^VIX",
-        "GBPUSD=X",
-        "JPY=X",
-        "BTC-USD",
-        "^CMC200",
-        "^FTSE",
-        "^N225",
-    ],
-)
+    ticker_names=SUPPORTED_STOCKS,
+))
