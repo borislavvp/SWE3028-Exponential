@@ -1,4 +1,4 @@
-SUPPORTED_STOCKS_MESSAGE = "SUPPORTED_STOCKS_MESSAGE"
+SUPPORTED_STOCKS_MESSAGE = "SUPPORTED_STOCKS"
 
 class StockItem:
     def __init__(self, symbol,shortName,exchange,currency,quoteType,regularMarketPrice):

@@ -19,6 +19,7 @@ def messageDecoder(messageDict):
 SUPPORTED_STOCKS = [
     "^GSPC",
     "BTC-USD",
+    "JPY=X",
 ]
 
 def get_stock_item_change_message(message):
