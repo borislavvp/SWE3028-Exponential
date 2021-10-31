@@ -126,6 +126,4 @@ dmypy.json
 .vscode
 .vscode/settings.json
 
-*messages/
-
 local/env.json
