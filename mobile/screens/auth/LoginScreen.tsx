@@ -7,7 +7,7 @@ import { RootStackScreenProps } from '../../globals/types';
 import { authLoginUserAction } from '../../redux/actions/auth/authLoginUserAction';
 import { AuthLoginInputModel } from '../../redux/actions/auth/types/AuthLogin';
 
-export default function AlertsScreen(props: RootStackScreenProps<"Login">) {
+export default function AlertsScreen(props: RootStackScreenProps<"Root">) {
   const dispatch = useDispatch();
   const [loginData, setLoginData] = React.useState<AuthLoginInputModel>({Email: "",Password:""});
   
