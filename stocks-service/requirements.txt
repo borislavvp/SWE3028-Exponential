@@ -1,1 +1,3 @@
 yliveticker==0.3.0
+websockets==10.0
+yfinance==0.1.64
