@@ -7,19 +7,16 @@ import { deleteHeader, setHeader } from '../utils/axiosUtils';
 
 const base = "https://localhost:44397/api/identity";
 const caller = axios.create({ baseURL: base })
-
 export interface AuthResponse {
   userEmail: string,
   token: string,
   tokenExpiration: number,
 }
 export function setAuthHeader(token: string) {
-  console.log("SET");
     setHeader(caller,"Authorization", `Bearer ${token}`);
 }
 
 export function deleteAuthHeader(){
-  console.log("Deleted");
     deleteHeader(caller,"Authorization");
 }
 

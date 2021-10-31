@@ -1,4 +1,4 @@
-import { AuthState } from "@/redux/reducers/auth/types/AuthState";
+import { AuthState } from "../../../reducers/auth/types/AuthState";
 
 export const AUTH_INITIALIZE = "AUTH_INITIALIZE";
 
