@@ -15,11 +15,18 @@ class MessageEncoder(json.JSONEncoder):
 def messageDecoder(messageDict):
     return namedtuple('X', messageDict.keys())(*messageDict.values())
 
+tickers = []
 
 SUPPORTED_STOCKS = [
     "^GSPC",
-    "BTC-USD",
+    "^DJI",
+    "EURUSD=X",
+    "^IXIC",
     "JPY=X",
+    "BTC-USD",
+    "^CMC200",
+    "^FTSE",
+    "^N225",
 ]
 
 def get_stock_item_change_message(message):
@@ -27,12 +34,12 @@ def get_stock_item_change_message(message):
     return json.dumps(StockItemChangeMessage(payload), indent=4,cls=MessageEncoder) 
 
 def get_supported_stocks_info_message():
-    supported_stocks = yf.Tickers(' '.join(SUPPORTED_STOCKS))
+    if(len(tickers) == 0):
+        supported_stocks = yf.Tickers(' '.join(SUPPORTED_STOCKS))
 
-    tickers = []
-    for ticker in SUPPORTED_STOCKS:
-        ticker_info = supported_stocks.tickers[ticker].info;
-        tickers.append(StockItem(ticker_info['symbol'],ticker_info['shortName'],ticker_info['exchange'],ticker_info['currency'],ticker_info['quoteType'],ticker_info['regularMarketPrice']))
+        for ticker in SUPPORTED_STOCKS:
+            ticker_info = supported_stocks.tickers[ticker].info;
+            tickers.append(StockItem(ticker_info['symbol'],ticker_info['shortName'],ticker_info['exchange'],ticker_info['currency'],ticker_info['quoteType'],ticker_info['regularMarketPrice']))
     
     return json.dumps(SupportedStocksMessage(tickers), indent=4,cls=MessageEncoder) 
 
