@@ -5,7 +5,7 @@ import { AuthLoginInputModel } from '../types/AuthLogin';
 import { AuthRegisterInputModel } from '../types/AuthRegister';
 import { deleteHeader, setHeader } from '../utils/axiosUtils';
 
-const base = "https://localhost:44397/api/identity";
+const base = "https://10.0.0.2:44397/api/identity";
 const caller = axios.create({ baseURL: base })
 export interface AuthResponse {
   userEmail: string,
@@ -47,7 +47,10 @@ export const authAPI = {
                 input
             )
             .then((res: AxiosResponse<AuthResponse>) => resolve(convertResponseData(res.data)))
-            .catch(() => reject());
+          .catch((e) => {
+            console.log(e)
+            reject();
+          });
     });
   },
   refreshToken(): Promise<AuthState> {

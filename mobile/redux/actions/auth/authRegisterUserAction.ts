@@ -7,6 +7,7 @@ import { AuthRegisterInputModel, AUTH_REGISTER } from './types/AuthRegister';
 import { storeAuthToLocalStorage } from './utils/authLocalStorageUtils';
 import { tokenMonitorAction } from './tokenMonitorActioon';
 import { startSocketClientAction } from '../socket/startSocketClientAction';
+import { setAuthLoadingStateAction } from '../common/setAuthLoadingStateAction';
 
 const authRegisterUserResult: ActionCreator<AuthActionTypes> = (authState: AuthState) => {
   return { type: AUTH_REGISTER, payload: authState };
@@ -14,19 +15,20 @@ const authRegisterUserResult: ActionCreator<AuthActionTypes> = (authState: AuthS
 
 export const authRegisterUserAction = (registerUserModel: AuthRegisterInputModel) => {
     return (dispatch: Dispatch<any>) => {
-      try {
-          return authAPI.registerUser(registerUserModel)
-                .then(res => {
-                    storeAuthToLocalStorage(res)
-                      .then(() => {
-                        const data = { ...res, logged: true };
-                        dispatch(authRegisterUserResult(data));
-                        dispatch(tokenMonitorAction());
-                        dispatch(startSocketClientAction());
-                      })
-                      .catch(() => { })
-                })
-              .catch(() => { })
-        } catch(e) {}   
+        dispatch(setAuthLoadingStateAction(true));
+        return authAPI.registerUser(registerUserModel)
+              .then(res => {
+                  storeAuthToLocalStorage(res)
+                    .then(() => {
+                      const data = { ...res, logged: true };
+                      dispatch(authRegisterUserResult(data));
+                      dispatch(tokenMonitorAction());
+                      dispatch(startSocketClientAction());
+                    })
+                  .catch(() => { })
+                .finally(() => dispatch(setAuthLoadingStateAction(false)))
+              })
+            .catch(() => { })
+            .finally(() => dispatch(setAuthLoadingStateAction(false)))
     }
 }
