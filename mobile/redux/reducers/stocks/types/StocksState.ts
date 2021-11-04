@@ -7,6 +7,7 @@ export interface StockItemState {
     quoteType:string,
     price: string,
     timestamp: number | null,
-    changePercent: number | null,
-    change: number | null,
+    changePercent: string ,
+    change: string,
+    logo?:string
 }
