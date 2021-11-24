@@ -3,6 +3,16 @@ import websockets
 import logging
 from stocksserver.messages import get_stock_item_change_message,get_supported_stocks_info_message,handle_client_message
 
+from exponent_server_sdk import (
+    DeviceNotRegisteredError,
+    PushClient,
+    PushMessage,
+    PushServerError,
+    PushTicketError,
+)
+from requests.exceptions import ConnectionError, HTTPError
+
+
 class SocketServer():
     clients = set()
 
@@ -24,7 +34,8 @@ class SocketServer():
              print(path)
              self.clients.add(websocket) 
              await websocket.send(get_supported_stocks_info_message())
-             
+             send_push_message("ExponentPushToken[AAAATITRKSw:APA91bE6khZsx_E2XXS-hE-Tryw_yLNcyV-R29vlgbESrPMWYF2vND7fQnqTdjkCrLNEfCtgiv1-MjTiBgjD25EXQxvMGH0jBdxbQi4bR4uTpPG1Wh1JpqZh34qU9fDWztyPHvJD5X8d]",
+             "asd")
              consumer_task = asyncio.ensure_future(
                 self.consumer_handler(websocket, path))
 
@@ -44,3 +55,41 @@ class SocketServer():
             await asyncio.Future()
             
               # run forever
+
+
+# Basic arguments. You should extend this function with the push features you
+# want to use, or simply pass in a `PushMessage` object.
+def send_push_message(token, message, extra=None):
+    try:
+        print("AEE")
+        response = PushClient().publish(
+            PushMessage(to=token,
+                        body=message,
+                        data=extra))
+                        
+        print("AEEWEEE")
+    except PushServerError as exc:
+        # Encountered some likely formatting/validation error.
+        print("Err")
+    except (ConnectionError, HTTPError) as exc:
+        # Encountered some Connection or HTTP error - retry a few times in
+        # case it is transient.
+        print("Err1")
+    except Exception as e:
+        print(str(e))
+
+    try:
+        # We got a response back, but we don't know whether it's an error yet.
+        # This call raises errors so we can handle them with normal exception
+        # flows.
+        response.validate_response()
+    except DeviceNotRegisteredError:
+        # Mark the push token as inactive
+        # from notifications.models import PushToken
+        # PushToken.objects.filter(token=token).update(active=False)
+        print("Err2")
+    except PushTicketError as exc:
+        # Encountered some other per-notification error.
+        print("Err3")
+    except Exception as e:
+        print(str(e))

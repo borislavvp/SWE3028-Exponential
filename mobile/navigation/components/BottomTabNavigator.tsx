@@ -7,6 +7,10 @@ import { ColorSchemeName, Pressable } from 'react-native';
 import { RootTabScreenProps } from '../types/RootTabScreenProps';
 import * as React from 'react';
 import { tabs } from '../tabs';
+import { View } from '../../components/Themed';
+import { useAppSelector } from '../../hooks/useStateHooks';
+import { useDispatch } from 'react-redux';
+import { resetNotificationsCounterAction } from '../../redux/actions/notifications/resetNotSeenNotificationsCounterAction';
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
@@ -14,6 +18,8 @@ import { tabs } from '../tabs';
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function renderTabScreens(colorScheme: NonNullable<ColorSchemeName>) {
+  const {notSeenNotifications} = useAppSelector(s => s.notifications);
+
   return tabs.map((tab => <BottomTab.Screen
     key={tab.name}
     name={tab.name}
@@ -21,7 +27,12 @@ function renderTabScreens(colorScheme: NonNullable<ColorSchemeName>) {
     options={({navigation}: RootTabScreenProps<typeof tab.name>) => ({
       title: tab.title,
       tabBarLabelPosition: "below-icon",
-      tabBarItemStyle: {paddingBottom:5},
+      tabBarItemStyle: { paddingBottom: 5 },
+      tabBarBadge: tab.name === "Notifications" ?
+        notSeenNotifications !== 0 ?
+          notSeenNotifications :
+          undefined :
+        undefined,
       tabBarIcon: ({ color }) => <TabBarIcon name={tab.iconName} color={color} />,
       headerRight: () => (
         <Pressable
@@ -45,13 +56,21 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof MaterialIcons>['name'];
   color: string;
 }) {
-  return  <MaterialIcons size={20}  {...props} />;
+   return <MaterialIcons size={20}  {...props} />;
 }
 
 export function BottomTabNavigator() {
+  const dispatch = useDispatch();
   const colorScheme = useColorScheme();
   return (
     <BottomTab.Navigator
+      screenListeners={{
+        tabPress: (e => {
+          if (e.target?.includes("Notifications")) {
+            dispatch(resetNotificationsCounterAction())
+          }
+        })
+      }}
       initialRouteName={tabs[0].name}
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].green,

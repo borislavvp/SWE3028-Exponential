@@ -13,11 +13,17 @@ const api2 = "https://api.polygon.io/v3/reference/tickers?search=A&active=true&s
 const logos = "https://s3.polygon.io/logos/amrs/logo.png";
 
 const searchStockActionResult: ActionCreator<SearchStockActionTypes> = (stocksState: StockSearchResult[]) => {
-  return { type: SEARCH_STOCK, payload: stocksState };
+    return { type: SEARCH_STOCK, payload: stocksState };
 }
 
 export const searchStockAction = (stockName:string) => {
-    return (dispatch: Dispatch<any>) => search(stockName, dispatch);
+    return (dispatch: Dispatch<any>) => {
+        if (stockName) {
+            search(stockName, dispatch)
+        } else {
+            dispatch(searchStockActionResult([]));
+        }
+    };
 }
 
 const search = debounce((stockName: string, dispatch: Dispatch<any>) => {
