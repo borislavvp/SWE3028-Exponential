@@ -34,8 +34,6 @@ class SocketServer():
              print(path)
              self.clients.add(websocket) 
              await websocket.send(get_supported_stocks_info_message())
-             send_push_message("ExponentPushToken[AAAATITRKSw:APA91bE6khZsx_E2XXS-hE-Tryw_yLNcyV-R29vlgbESrPMWYF2vND7fQnqTdjkCrLNEfCtgiv1-MjTiBgjD25EXQxvMGH0jBdxbQi4bR4uTpPG1Wh1JpqZh34qU9fDWztyPHvJD5X8d]",
-             "asd")
              consumer_task = asyncio.ensure_future(
                 self.consumer_handler(websocket, path))
 
