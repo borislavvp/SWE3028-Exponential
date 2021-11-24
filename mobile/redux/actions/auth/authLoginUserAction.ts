@@ -23,7 +23,7 @@ export const authLoginUserAction = (loginUserModel: AuthLoginInputModel) => {
                       const data = { ...res, logged: true };
                       dispatch(authLoginUserResult(data));
                       dispatch(tokenMonitorAction());
-                      dispatch(startSocketClientAction());
+                      // dispatch(startSocketClientAction());
                     })
                     .catch(() => { })
                     .finally(() => dispatch(setAuthLoadingStateAction(false)))

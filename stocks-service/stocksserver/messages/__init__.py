@@ -31,6 +31,7 @@ SUPPORTED_STOCKS = [
 
 def get_stock_item_change_message(message):
     payload = StockItemChangePayload(message['id'],message['price'],message['timestamp'],message['changePercent'],message['change'])
+    print(payload)
     return json.dumps(StockItemChangeMessage(payload), indent=4,cls=MessageEncoder) 
 
 def get_supported_stocks_info_message():

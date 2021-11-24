@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { Platform, StyleSheet, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { Text, TouchableHighlight, View } from '../../components/Themed';
@@ -9,12 +9,12 @@ import { AuthLoginInputModel } from '../../redux/actions/auth/types/AuthLogin';
 
 export default function AlertsScreen(props: RootStackScreenProps<"Root">) {
   const dispatch = useDispatch();
-  const [loginData, setLoginData] = React.useState<AuthLoginInputModel>({Email: "",Password:""});
-  
+  const [loginData, setLoginData] = React.useState<AuthLoginInputModel>({email: "",password:""});
+
   const signIn = () => {
       dispatch(authLoginUserAction(loginData))
   }
-
+  
   const goToRegisterPage = () => props.navigation.navigate("Register");
 
   return (
@@ -23,15 +23,15 @@ export default function AlertsScreen(props: RootStackScreenProps<"Root">) {
         <TextInput
             style={styles.inputField}
             placeholder="Email"
-            value={loginData.Email}
-            onChangeText={(email) => setLoginData({...loginData,Email:email})}
+            value={loginData.email}
+            onChangeText={(email) => setLoginData({...loginData,email:email})}
         />
         <Text>Password</Text>
         <TextInput
             style={styles.inputField}
             placeholder="Password"
-            value={loginData.Password}
-            onChangeText={(password) => setLoginData({...loginData,Password:password})}
+            value={loginData.password}
+            onChangeText={(password) => setLoginData({...loginData,password:password})}
             secureTextEntry
           />
        
@@ -48,7 +48,10 @@ export default function AlertsScreen(props: RootStackScreenProps<"Root">) {
 
 const styles = StyleSheet.create({
     container: {
-        padding:20,
+        paddingTop:50,
+        paddingBottom:50,
+        paddingLeft:20,
+        paddingRight:20,
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'flex-start',

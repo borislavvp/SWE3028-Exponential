@@ -23,7 +23,7 @@ export const authRegisterUserAction = (registerUserModel: AuthRegisterInputModel
                       const data = { ...res, logged: true };
                       dispatch(authRegisterUserResult(data));
                       dispatch(tokenMonitorAction());
-                      dispatch(startSocketClientAction());
+                      // dispatch(startSocketClientAction());
                     })
                   .catch(() => { })
                 .finally(() => dispatch(setAuthLoadingStateAction(false)))
