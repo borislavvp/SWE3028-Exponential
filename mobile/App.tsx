@@ -7,11 +7,12 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { store } from './redux/store';
+import { LogBox } from 'react-native';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-
+  LogBox.ignoreAllLogs(true);
   if (!isLoadingComplete) {
     return null;
   } else {
