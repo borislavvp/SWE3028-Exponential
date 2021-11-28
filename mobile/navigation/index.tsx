@@ -26,6 +26,8 @@ import messaging from '@react-native-firebase/messaging';
 import { createNavigationContainerRef } from '@react-navigation/native';
 import StockItemScreen from '../screens/StockItemScreen';
 import { StockItemHeader } from '../components/stock/StockItemHeader';
+import StocksNotificationItemScreen from '../screens/StockNotificationItemScreen';
+import { StockNotificationItemHeader } from '../components/stock/StockNotificationItemHeader';
 
 export const navigationRef = createNavigationContainerRef()
 
@@ -58,12 +60,8 @@ function RootNavigator(props:any) {
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
-    messaging().getToken().then((token) => {
-      console.log("TOOKEN", token);
-    });
-
     messaging().onTokenRefresh((token) => {
-      console.log("TOOKEN", token);
+      console.log("REFRESH", token);
     });
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       dispatch(handleNewNotificationAction(remoteMessage));
@@ -76,7 +74,7 @@ function RootNavigator(props:any) {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
-        const unsubscribe = messaging().onMessage(remoteMessage => {
+        messaging().onMessage(remoteMessage => {
           dispatch(handleNewNotificationAction(remoteMessage));
         });
         dispatch(authInitializeAction());
@@ -96,12 +94,14 @@ function RootNavigator(props:any) {
   return (
       isAuthFetchingComplete ? (
     <Stack.Navigator>
-    <Stack.Screen name="Root" component={!logged ? BottomTabNavigator : LoginScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="Root" component={logged ? BottomTabNavigator : LoginScreen} options={{ headerShown: false }} />
         {
-          logged && (
+          !logged && (
             <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         )}
-        <Stack.Screen name="StockItem" component={StockItemScreen} options={{headerTitle: (props => StockItemHeader(props))}} />
+      <Stack.Screen name="StockItem" component={StockItemScreen} options={{headerTitle: (props => StockItemHeader(props))}} />
+      <Stack.Screen name="StockNotificationItem"
+          component={StocksNotificationItemScreen} options={{ headerTitle: (props => StockNotificationItemHeader(props)) }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
