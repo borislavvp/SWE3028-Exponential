@@ -4,9 +4,13 @@ export interface NewNotificationPayload
 {
     // "data": { },
     messageId: string,
+    data:{
+        stockSymbol: string,
+        value: number
+    },
     notification: {
         android: {
-            imageUrl:string
+            imageUrl: string,
         },
         body: string,
         title:string

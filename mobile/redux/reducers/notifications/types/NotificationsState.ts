@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export type NotificationsState = {
     notSeenNotifications: number,
     notifications:NotificationItem[]
@@ -6,7 +8,10 @@ export type NotificationsState = {
 export interface NotificationItem{
     id:string,
     message: string,
+    stockSymbol: string,
+    value: number,
+    result: string,
     imageUrl: string,
-    sentTime: number,
-    ttl:number
+    sentTime: DateTime,
+    seen:boolean
 }
