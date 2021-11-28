@@ -1,38 +1,16 @@
-from yliveticker import YLiveTicker
-from stocksserver import SocketServer
-from stocksserver.messages import SUPPORTED_STOCKS
+from dotenv import load_dotenv
+load_dotenv()
 
-import asyncio
-import threading
+import time
+from helpers import check_alerts
 
-def start_loop(loop, server):
-    loop.run_until_complete(server)
-    loop.run_forever()
-
-def printRes(ws, res):
-    socket.broadcast(res)
-    # print(res)
-
-
-def on_close(ws,res):
-    print("bye")
-
+starttime = time.time()
 try:
 
-    socket = SocketServer(port=3333)
-
-    loop = asyncio.new_event_loop()
-
-    thread = threading.Thread(target=start_loop, args=(loop, socket.run(loop)))
-    thread.start()
-
-    loop.create_task(YLiveTicker(
-        on_ticker=printRes,
-        on_close=on_close,
-        ticker_names=SUPPORTED_STOCKS,
-    ))
+   while True:
+    check_alerts()
+    time.sleep(3600.0 - ((time.time() - starttime) % 3600.0))
 
 except (Exception, KeyboardInterrupt) as e:
     print('ERROR', str(e))
-    loop.stop()
     exit()
