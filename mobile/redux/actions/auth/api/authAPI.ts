@@ -6,22 +6,14 @@ import { AuthRegisterInputModel } from '../types/AuthRegister';
 import { deleteHeader, setHeader } from '../utils/axiosUtils';
 
 const base = "http://10.0.2.2:64438/api/identity";
-const caller = axios.create({ baseURL: base })
+export const authCaller = axios.create({ baseURL: base })
 export interface AuthResponse {
   userEmail: string,
   token: string,
   tokenExpiration: number,
 }
-export function setAuthHeader(token: string) {
-    setHeader(caller,"Authorization", `Bearer ${token}`);
-}
-
-export function deleteAuthHeader(){
-    deleteHeader(caller,"Authorization");
-}
 
 const convertResponseData = (response: AuthResponse): AuthState => {
-  console.log(response);
   return {
     ...response,
     logged: response.token != "",
@@ -33,7 +25,7 @@ const convertResponseData = (response: AuthResponse): AuthState => {
 export const authAPI = {
   registerUser(input:AuthRegisterInputModel): Promise<AuthState> {
     return new Promise((resolve,reject) => {
-        caller
+        authCaller
             .post(`${base}/registration`,
                 input
             )
@@ -42,8 +34,8 @@ export const authAPI = {
     });
   },
   loginUser(input:AuthLoginInputModel): Promise<AuthState> {
-    return new Promise((resolve,reject) => {
-        caller
+    return new Promise((resolve, reject) => {
+        authCaller
             .post(`${base}/login`,
               input
             )
@@ -55,7 +47,7 @@ export const authAPI = {
   },
   refreshToken(): Promise<AuthState> {
     return new Promise((resolve,reject) => {
-        caller
+        authCaller
             .post(`${base}/token/refresh`)
             .then((res: AxiosResponse<AuthResponse>) => resolve(convertResponseData(res.data)))
             .catch(() => reject());
