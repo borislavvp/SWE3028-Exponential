@@ -1,4 +1,6 @@
 import { ActionCreator, Dispatch } from 'redux';
+import { alertsAPI } from '../alerts/api/alertsAPI';
+import { setNotificationsLoadingStateAction } from '../common/setNotificationsLoadingStateAction';
 import { FetchNotificationsPayload, FETCH_NOTIFICATIONS } from './types/FetchNotifications';
 import { NewNotificationPayload, NEW_NOTIFICATION } from './types/NewNotification';
 import { NotificationActionTypes } from './types/NotificationActionTypes';
@@ -10,20 +12,11 @@ const fetchNotificationActionResult: ActionCreator<NotificationActionTypes> = (n
 export const fetchNotificationsAction = () => {
     return (dispatch: Dispatch<any>) => {
         dispatch(fetchNotificationActionResult([]))
-        // dispatch(setAuthLoadingStateAction(true));
-        // return authAPI.registerUser(registerUserModel)
-        //       .then(res => {
-        //           storeAuthToLocalStorage(res)
-        //             .then(() => {
-        //               const data = { ...res, logged: true };
-        //               dispatch(authRegisterUserResult(data));
-        //               dispatch(tokenMonitorAction());
-        //               // dispatch(startSocketClientAction());
-        //             })
-        //           .catch(() => { })
-        //         .finally(() => dispatch(setAuthLoadingStateAction(false)))
-        //       })
-        //     .catch(() => { })
-        //     .finally(() => dispatch(setAuthLoadingStateAction(false)))
+        dispatch(setNotificationsLoadingStateAction(true));
+        return alertsAPI.fetchAlertsNotifications()
+              .then(res => dispatch(fetchNotificationActionResult(res)))
+                .catch(() => { })
+            .catch(() => { })
+            .finally(() => dispatch(setNotificationsLoadingStateAction(false)))
     }
 }
