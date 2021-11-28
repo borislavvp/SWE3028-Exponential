@@ -18,7 +18,7 @@ const searchStockActionResult: ActionCreator<SearchStockActionTypes> = (stocksSt
 
 export const searchStockAction = (stockName:string) => {
     return (dispatch: Dispatch<any>) => {
-        if (stockName) {
+        if (stockName !== "") {
             search(stockName, dispatch)
         } else {
             dispatch(searchStockActionResult([]));
