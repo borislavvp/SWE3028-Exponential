@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   stockItem: {
     display: "flex",
     flexDirection:"row",
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
