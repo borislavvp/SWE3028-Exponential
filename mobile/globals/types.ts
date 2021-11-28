@@ -19,6 +19,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Register: undefined;
   StockItem: undefined;
+  StockNotificationItem: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
