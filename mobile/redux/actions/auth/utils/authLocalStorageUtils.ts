@@ -1,13 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthState } from "../../../reducers/auth/types/AuthState";
-import { deleteAuthHeader, setAuthHeader } from "../api/authAPI";
+import { alertsCaller } from "../../alerts/api/alertsAPI";
+import { authCaller } from "../api/authAPI";
 import { AuthStorageKey } from "../types/AuthStorageKey";
+import { deleteAuthHeaders, setAuthHeaders } from "./axiosUtils";
 
 export const storeAuthToLocalStorage = (authData: AuthState) => {
     return new Promise<void>((resolve, reject) => {
         AsyncStorage.setItem(AuthStorageKey, JSON.stringify({ ...authData,tokenExpiration: authData.tokenExpiration?.toISO() }))
             .then(() => {
-                setAuthHeader(authData.token);
+                setAuthHeaders([authCaller,alertsCaller],authData.token);
                 resolve();
             })
             .catch(() => reject());
@@ -18,7 +20,7 @@ export const deleteAuthFromLocalStorage = () => {
     return new Promise<void>((resolve, reject) => {
         AsyncStorage.removeItem(AuthStorageKey)
             .then(() => {
-                deleteAuthHeader();
+                deleteAuthHeaders([authCaller,alertsCaller]);
                 resolve();
             })
             .catch(() => reject());

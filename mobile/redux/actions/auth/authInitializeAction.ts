@@ -7,10 +7,10 @@ import { AuthState, InitialAuthState } from '../../reducers/auth/types/AuthState
 import { AuthStorageKey } from './types/AuthStorageKey';
 import { tokenMonitorAction } from './tokenMonitorActioon';
 import { DateTime } from 'luxon';
-import { RootState } from '../../store';
-import { startSocketClientAction } from '../socket/startSocketClientAction';
-import { setAuthHeader } from './api/authAPI';
+import { authCaller } from './api/authAPI';
 import { setAuthLoadingStateAction } from '../common/setAuthLoadingStateAction';
+import { setAuthHeaders } from './utils/axiosUtils';
+import { alertsCaller } from '../alerts/api/alertsAPI';
 
 const authDataInitializedResult: ActionCreator<AuthActionTypes> = (authState: AuthState) => {
   return { type: AUTH_INITIALIZE, payload: authState };
@@ -24,7 +24,7 @@ export const authInitializeAction = () => {
                 if (storedData !== null) {
                     const data = { ...JSON.parse(storedData), logged: true };
                     data.tokenExpiration = DateTime.fromISO(data.tokenExpiration);
-                    setAuthHeader(data.token);
+                    setAuthHeaders([authCaller,alertsCaller],data.token);
                     dispatch(authDataInitializedResult(data));
                     dispatch(tokenMonitorAction());
                     // dispatch(startSocketClientAction());
