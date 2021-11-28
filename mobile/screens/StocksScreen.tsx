@@ -27,6 +27,7 @@ export default function StocksScreen({ navigation, route }: RootTabScreenProps<'
   return (
     <ScrollView contentContainerStyle={styles.container} 
       stickyHeaderIndices={[0]}
+      showsVerticalScrollIndicator={false}
     >
       <SearchBar
         containerStyle={styles.searchContainer}
