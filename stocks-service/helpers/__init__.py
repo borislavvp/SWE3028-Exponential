@@ -9,6 +9,8 @@ from azure.storage.blob import ContainerClient, BlobServiceClient
 from datetime import datetime
 from ai_model import predict
 
+notifications_sent = []
+
 import json
 
 BLOB_ID = os.getenv('BLOB_ID')
@@ -57,6 +59,7 @@ def get_devices_for_notification(stockSymbol,alertValue):
     if(r.ok):
         return r.json()
     else:
+        print(r.json())
         return []
 
 def persist_notifications(devices,stockSymbol,alertValue,imageUrl,dateTime):
@@ -72,36 +75,40 @@ def persist_notifications(devices,stockSymbol,alertValue,imageUrl,dateTime):
     requests.post(url = f"{BASE_ALERTS_API}/save/notifications", data=json.dumps(PARAMS), headers=headers)
     
 def check_alerts():
-    res = predict("TSLA")
-    now = datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
-    notificationImageUrl = generate_notification_image("TSLA",now,res['plt'])
-    print(notificationImageUrl)
+    # res = predict("TSLA")
+    # now = datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
+    # notificationImageUrl = generate_notification_image("TSLA",now,res['plt'])
+    # print(notificationImageUrl)
     alerts = get_alerts()
     for alert in alerts:
         # check with model
-        # res = model.predict(alert)
-        # devices_to_send = get_devices_for_notification(res.alertValue,alert)
-        devices_to_send = get_devices_for_notification(stockSymbol=alert,alertValue=-0.02)
+        print(alert in notifications_sent)
+        if(alert in notifications_sent):
+            continue
+
+        res = predict(alert)
+        alertValue = res["alert_value"]
+        print(alertValue)
+        print(alertValue>0)
+        devices_to_send = get_devices_for_notification(alert,alertValue)
+        # devices_to_send = get_devices_for_notification(stockSymbol=alert,alertValue=-0.02)
         print(devices_to_send)
         
-        # now = datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
+        now = datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
         
         if(len(devices_to_send) <= 0 ):
             return
 
-        # notificationImageUrl = generate_notification_image(alert,now)
-        # persist_notifications(devices=devices_to_send,stockSymbol=alert,alertValue=-0.02,imageUrl=notificationImageUrl,dateTime=now)
-        # send_notification(devices=devices_to_send,stockSymbol=alert,alertValue=-0.02,imageUrl=notificationImageUrl)
+        notificationImageUrl = generate_notification_image(alert,now,res['plt'])
+        persist_notifications(devices=devices_to_send,stockSymbol=alert,alertValue=alertValue,imageUrl=notificationImageUrl,dateTime=now)
+        send_notification(devices=devices_to_send,stockSymbol=alert,alertValue=alertValue,imageUrl=notificationImageUrl)
+        notifications_sent.append(alert)
 
 def send_notification(devices,stockSymbol,alertValue, imageUrl):
 
     message_title = "Stock Alert!"
-    message_body = stockSymbol + " stock is about to " 
-    if(alertValue > 0):
-        message_body + "surge!"
-    else:
-        message_body + "plunge!"
-    # result = push_service.notify_single_device(registration_id=registration_id, message_title=message_title, message_body=message_body)
+    alert_type = "surge!" if alertValue > 0 else "plunge!"
+    message_body = stockSymbol + " stock is about to " + alert_type
 
     extra_notification_kwargs = {
         'image': imageUrl,
@@ -112,8 +119,6 @@ def send_notification(devices,stockSymbol,alertValue, imageUrl):
     }
     # # Send to multiple devices by passing a list of ids.
     registration_ids = devices
-    # message_title = "Uber update"
-    # message_body = "Hope you're having fun this weekend, don't forget to check today's news"
     result = push_service.notify_multiple_devices(
         registration_ids=registration_ids,
         message_title=message_title, 

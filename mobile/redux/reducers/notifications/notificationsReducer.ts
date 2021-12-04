@@ -24,7 +24,7 @@ export function notificationsReducer(state: NotificationsState = {
                     stockSymbol: action.payload.data.stockSymbol,
                     result: action.payload.data.value < 0 ? 'plunge' : 'surge',
                     sentTime: DateTime.fromSeconds(action.payload.sentTime),
-                    value: action.payload.data.value,
+                    value: Number.parseFloat(`${action.payload.data.value}`).toFixed(2),
                     seen:false
                 }
             ] 

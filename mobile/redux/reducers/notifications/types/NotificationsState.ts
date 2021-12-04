@@ -9,7 +9,7 @@ export interface NotificationItem{
     id:string,
     message: string,
     stockSymbol: string,
-    value: number,
+    value: string,
     result: string,
     imageUrl: string,
     sentTime: DateTime,

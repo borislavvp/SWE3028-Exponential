@@ -24,7 +24,10 @@ export default function NotificationsScreen({ navigation, route }: RootTabScreen
     <View style={styles.container}>
       {notificationsStateLoading ? <ActivityIndicator size="large"/> :
         notifications.length > 0 ? notifications.map(n => <StockNotificationItem key={n.id} item={n} />) :
+        <View> 
+          <Text style={{margin:20, textAlign:"center", fontWeight:'600',fontSize:20}}> No notifications available </Text>
           <Image source={require("../assets/images/notifications_undraw.png")} style={{ height: Dimensions.get("window").height, width: Dimensions.get("window").width, resizeMode: 'contain', }} />
+        </View>
       }
     </View>
   );

@@ -9,7 +9,7 @@ try:
 
    while True:
     check_alerts()
-    time.sleep(3600.0 - ((time.time() - starttime) % 3600.0))
+    time.sleep(60.0 - ((time.time() - starttime) % 60.0))
 
 except (Exception, KeyboardInterrupt) as e:
     print('ERROR', str(e))
