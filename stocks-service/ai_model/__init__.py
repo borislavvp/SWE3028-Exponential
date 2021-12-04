@@ -329,6 +329,8 @@ def predict(stockName):
                       error_avg)/(10**latest_stock_price) * 100
     stock_ratio_down = (pred - 10**latest_stock_price -
                         error_avg)/(10**latest_stock_price) * 100
+    stock_ratio = (pred - 10**latest_stock_price)/(10**latest_stock_price) * 100
+            
     #print("Stock price's ratio is: %.2f < X < %.2f" %(stock_ratio_down,stock_ratio_up))
 
     # stock_ratio > 0 : surge
@@ -402,4 +404,4 @@ def predict(stockName):
     for i in range(100):
         os.remove('./%d.png' % i)
 
-    return {'val_upper': stock_ratio_up, 'val_lower': stock_ratio_down, 'plt': img}
+    return {'alert_value': stock_ratio[0][0], 'plt': img}

@@ -22,8 +22,11 @@ export default function AlertsScreen({ navigation, route }: RootTabScreenProps<'
   return (
     <View style={styles.container}>
       {alertStateLoading ? <ActivityIndicator size="large"/> : alerts.length > 0 ? alerts.map(a => <StockAlertItem key={a.StockSymbol} item={a} />) :
+        <View> 
+          <Text style={{margin:20, textAlign:"center", fontWeight:'600',fontSize:20}}> No alerts set </Text>
         <Image source={require("../assets/images/alerts_undraw.png")}
           style={{ height: Dimensions.get("window").height, width: Dimensions.get("window").width, resizeMode: 'contain', }} />
+        </View> 
    }
     </View>
   );
