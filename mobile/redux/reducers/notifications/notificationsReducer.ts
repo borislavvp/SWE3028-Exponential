@@ -16,7 +16,6 @@ export function notificationsReducer(state: NotificationsState = {
           return {
             notSeenNotifications: state.notSeenNotifications + 1,
             notifications: [
-                ...state.notifications,
                 {
                     id: action.payload.messageId,
                     imageUrl: action.payload.notification.android.imageUrl,
@@ -26,7 +25,8 @@ export function notificationsReducer(state: NotificationsState = {
                     sentTime: DateTime.fromSeconds(action.payload.sentTime),
                     value: Number.parseFloat(`${action.payload.data.value}`).toFixed(2),
                     seen:false
-                }
+                },
+                ...state.notifications
             ] 
         };
       }
