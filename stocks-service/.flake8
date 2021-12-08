@@ -1,0 +1,18 @@
+[flake8]
+doctests = True
+
+import-order-style = smarkets
+application-import-names = parameters
+
+exclude = .git,
+          __pycache__
+
+max-line-length = 90
+
+# D200 - One-line docstring should fit on one line with quotes
+# D204 - 1 blank line required after class docstring
+# S101 - Use of assert detected
+# B108 - Insecure usage of tmp file/directory
+# T001 - print found, ignore them as printing is useful for logging
+# W503 - line break before binary operator
+ignore = D200,D204,S101,B108,T001,W503
