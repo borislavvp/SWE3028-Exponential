@@ -1,11 +1,8 @@
 import requests
 import os
 from pyfcm import FCMNotification
-import matplotlib.pyplot as plt
-import numpy as np
-from io import BytesIO
 import os
-from azure.storage.blob import ContainerClient, BlobServiceClient
+from azure.storage.blob import  BlobServiceClient
 from datetime import datetime
 from ai_model import predict
 
@@ -21,27 +18,12 @@ def get_blob_link(blobName,containerName):
     return f"https://{BLOB_ID}.blob.core.windows.net/{containerName}/{blobName}"
 
 def generate_notification_image(stockSymbol,dateTime,image_stream):
-    # # create some mock data
-    # t = np.arange(0.01, 10.0, 0.01)
-    # data1 = np.sin(2 * np.pi * t)
-
-    # # plot it
-    # fig, ax1 = plt.subplots()
-    # ax1.set_xlabel('time (s)')
-    # ax1.set_ylabel('exp')
-    # ax1.plot(t, data1)
-
-    # image_stream = BytesIO()
-    # plt.savefig(image_stream)
-    # # reset stream's position to 0
-    # image_stream.seek(0)
 
     blob_name = f"{stockSymbol}-NOTIFICATION-{dateTime}.png"
     # upload in blob storage
     CONNECTION_STRING = os.getenv("BLOB_CONNECITON_STRING")
     NOTIFICATIONS_CONTAINER=os.getenv('NOTIFICATIONS_BLOB_CONTAINER')
     blob_service_client = BlobServiceClient.from_connection_string(conn_str=CONNECTION_STRING)
-    # container_client = ContainerClient.from_container_url(os.getenv('BLOB_STORAGE_CONTAINER_SAS_TOKEN'))
     blob_client = blob_service_client.get_blob_client(container=NOTIFICATIONS_CONTAINER,blob = blob_name)
     blob_client.upload_blob(image_stream.read(), blob_type="BlockBlob") 
     # return blob_name
@@ -75,10 +57,6 @@ def persist_notifications(devices,stockSymbol,alertValue,imageUrl,dateTime):
     requests.post(url = f"{BASE_ALERTS_API}/save/notifications", data=json.dumps(PARAMS), headers=headers)
     
 def check_alerts():
-    # res = predict("TSLA")
-    # now = datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
-    # notificationImageUrl = generate_notification_image("TSLA",now,res['plt'])
-    # print(notificationImageUrl)
     alerts = get_alerts()
     for alert in alerts:
         # check with model
