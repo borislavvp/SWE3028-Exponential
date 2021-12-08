@@ -21,12 +21,12 @@ export default function StocksItemScreen({ navigation, route }: RootStackScreenP
 
     React.useEffect(() => {
         const params = route.params! as {ticker: string;};
-        // stocksAPI.stockHistoricalData(params.ticker).then(res => {
+        stocksAPI.stockHistoricalData(params.ticker).then(res => {
             setStockData({
-                labels: mockHistData.map((d: { date: string; }) => DateTime.fromISO(d.date).day.toString()).reverse(),
-                data: mockHistData.map((d: { close: number; }) => d.close).reverse()
+                labels: res.map((d: { date: string; }) => DateTime.fromISO(d.date).day.toString()).reverse(),
+                data: res.map((d: { close: number; }) => d.close).reverse()
             });
-        // });
+        });
     },[])
     const setAlert = () => {
         const params = route.params! as {

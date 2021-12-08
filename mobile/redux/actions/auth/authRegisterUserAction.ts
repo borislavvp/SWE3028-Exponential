@@ -6,7 +6,6 @@ import { authAPI } from './api/authAPI';
 import { AuthRegisterInputModel, AUTH_REGISTER } from './types/AuthRegister';
 import { storeAuthToLocalStorage } from './utils/authLocalStorageUtils';
 import { tokenMonitorAction } from './tokenMonitorActioon';
-import { startSocketClientAction } from '../socket/startSocketClientAction';
 import { setAuthLoadingStateAction } from '../common/setAuthLoadingStateAction';
 
 const authRegisterUserResult: ActionCreator<AuthActionTypes> = (authState: AuthState) => {
@@ -23,7 +22,6 @@ export const authRegisterUserAction = (registerUserModel: AuthRegisterInputModel
                       const data = { ...res, logged: true };
                       dispatch(authRegisterUserResult(data));
                       dispatch(tokenMonitorAction());
-                      // dispatch(startSocketClientAction());
                     })
                   .catch(() => { })
                 .finally(() => dispatch(setAuthLoadingStateAction(false)))

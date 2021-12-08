@@ -1,6 +1,6 @@
-import { SET_ALERT } from "../../../socket/messages/client/SetAlertMessage";
 import { AlertActionTypes } from "../../actions/alerts/types/AlertsActionTypes";
 import { FETCH_ALERTS } from "../../actions/alerts/types/FetchAlerts";
+import { SET_ALERT } from "../../actions/alerts/types/SetAlert";
 import { AlertsState } from "./types/AlertsState";
 
 export function alertsReducer(state: AlertsState = [],action:AlertActionTypes): AlertsState {

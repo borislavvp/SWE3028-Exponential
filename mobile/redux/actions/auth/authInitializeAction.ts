@@ -27,7 +27,6 @@ export const authInitializeAction = () => {
                     setAuthHeaders([authCaller,alertsCaller],data.token);
                     dispatch(authDataInitializedResult(data));
                     dispatch(tokenMonitorAction());
-                    // dispatch(startSocketClientAction());
                 } else {
                     dispatch(authDataInitializedResult(InitialAuthState))
                 }
