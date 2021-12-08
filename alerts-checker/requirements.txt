@@ -1,5 +1,4 @@
 yliveticker==0.3.0
-websockets==10.0
 yfinance==0.1.64
 exponent_server_sdk==2.0.0
 pyfcm==1.5.4
