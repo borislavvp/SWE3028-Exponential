@@ -2,6 +2,9 @@
 
 This repository includes solution for the capstone design project. Below is given short information regarding each service. Moreover it is explained how to run and debug the whole solution locally.
 
+## Overview of the system architecture
+![Group 139 (4)](https://user-images.githubusercontent.com/46525030/145254901-ba9140cf-a6f7-457c-a336-ed8d58942eba.png)
+
 ## Solution
 
 The repository contains 4 projects, each with different purpose. 
