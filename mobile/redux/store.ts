@@ -1,11 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
 import { rootReducer } from './reducers';
 import thunk from 'redux-thunk';
-import { SocketService } from '../socket/SocketService';
 
 const middleware = applyMiddleware(thunk);
-
-export const socket = new SocketService();
 
 export const store = createStore(rootReducer, middleware);
 
